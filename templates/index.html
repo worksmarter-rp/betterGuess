@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Guessing Game</title>
+    {% import "bootstrap/wtf.html" as wtf %}
+</head>
+<body>
+Set up your game. <br>
+After each guess I will tell you higher or lower.
+{{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+</body>
+</html>
