@@ -32,19 +32,19 @@ def reset():
     guesses_under = []
 reset()
 
-def var_check():
-    print(f'{game_range = }.  {game_tries = }, {secret_number = }')
+#def var_check():
+#    print(f'{game_range = }.  {game_tries = }, {secret_number = }')
 @app.route('/', methods=["GET","POST"])
 def new_game():
     reset()
     global game_range, game_tries, secret_number
     form = InputForm()
-    var_check()
+    #var_check()
     if form.validate_on_submit():
         game_range = form.range.data
         game_tries = form.tries.data
         secret_number = randint(1, game_range)
-        var_check()
+        #var_check()
         return redirect(url_for('play_game'))
     return render_template("index.html", form=form)
 
@@ -54,9 +54,9 @@ def play_game():
     global attempts, state_of_game
     if form.validate_on_submit():
         attempts += 1
-        var_check()
+        #var_check()
         guess = form.guess.data
-        print(f'{guess = }, you have used {attempts} out of {game_tries}. {game_tries-attempts} remain')
+        #print(f'{guess = }, you have used {attempts} out of {game_tries}. {game_tries-attempts} remain')
         game_status = f'you have used {attempts} out of {game_tries}. \n {game_tries-attempts} remain'
         if guess == secret_number:
             flash(f"You guessed my number of {secret_number} in {attempts} tries!")
