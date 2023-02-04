@@ -1,13 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Guessing Game</title>
-    {% import "bootstrap/wtf.html" as wtf %}
-</head>
-<body>
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet", href="{{url_for('static', filename='css/styles.css') }}">
+{% endblock %}
+{% block title %}Setup Game!{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-8">
+
+
 Set up your game. <br>
 After each guess I will tell you higher or lower.
 {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
-</body>
-</html>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

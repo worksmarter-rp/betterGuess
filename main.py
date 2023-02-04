@@ -25,7 +25,7 @@ def reset():
     global game_range, game_tries, secret_number, attempts, state_of_game, guesses_over, guesses_under
     game_range = 100
     game_tries = 8
-    secret_number = 2
+    secret_number = randint(1,100)
     attempts = 0
     state_of_game = "setup"
     guesses_over = []
@@ -52,29 +52,60 @@ def new_game():
 def play_game():
     form = NumberForm()
     global attempts, state_of_game
+    stats = {
+        "tries": game_tries,
+        "attempts": 0,
+        "guesses": [],
+        "guesses_under": guesses_under,
+        "guesses_over": guesses_over,
+        "secret": secret_number,
+        "game_state": 0,
+    }
     if form.validate_on_submit():
         attempts += 1
-        #var_check()
+        if attempts > game_tries:
+            stats = {
+                "tries": game_tries,
+                "attempts": 0,
+                "guesses": [],
+                "guesses_under": guesses_under,
+                "guesses_over": guesses_over,
+                "secret": secret_number,
+                "game_state": -1,
+            }
+            return render_template('play_game.html', form=form, stats=stats), {"refresh": f'4; url="{url_for("new_game")}"'}
+
         guess = form.guess.data
-        #print(f'{guess = }, you have used {attempts} out of {game_tries}. {game_tries-attempts} remain')
+
+
         game_status = f'you have used {attempts} out of {game_tries}. \n {game_tries-attempts} remain'
         if guess == secret_number:
             flash(f"You guessed my number of {secret_number} in {attempts} tries!")
-            state_of_game = "won"
+            game_state = 1
+            direction = "equal"
         elif guess > secret_number:
+            game_state = 2
             direction = "smaller"
             guesses_over.append(guess)
         elif guess < secret_number:
+            game_state = 3
             direction = "bigger"
             guesses_under.append(guess)
-        if state_of_game != "won":
-            flash(f"My number is {direction} than {guess}, \n {game_status} \n\n "
-                  f"{guesses_over} were too big. \n {guesses_under} were too small")
+        stats = {
+            "tries": game_tries,
+            "attempts": attempts,
+            "guesses": [].append(guess),
+            "guesses_under": guesses_under,
+            "guesses_over": guesses_over,
+            "secret": secret_number,
+            "game_state": game_state,
+            "direction": direction,
+            "guess":guess
+        }
+        return render_template('play_game.html', form=form, stats=stats)
 
-
-        return render_template('play_game.html', form=form, guesses_over=guesses_over, guesses_under=guesses_under)
-    return render_template('play_game.html', form=form)
+    return render_template('play_game.html', form=form, stats=stats)
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True, host='0.0.0.0')
