@@ -18,8 +18,10 @@
       <div class="row">
 
     <div class="col-sm-12 col-md-8">
-        {% if stats.game_state > 1 %}
+        {% if stats.game_state == 2 %}
+        {% if stats.attempts > 0 %}
         My number is {{ stats.direction }} than {{ stats.guess }}
+        {% endif %}
         <table class="table table-dark">
             <tr>
                 <td>
@@ -40,7 +42,7 @@
                     Guesses too big
                 </td>
             </tr>
-            <tr>
+             <tr>
                 <td>
                     {% for guess in stats.guesses_under %}
                     {{guess}}
@@ -57,13 +59,17 @@
         {% else %}
         <div class="row">
     <div class="col-sm-12 col-md-8">
-        {% if stats.game_state == 1 %}
-
-                You Won with {{stats.guess}} in {{stats.attempts}} tries!
-        {% elif stats.game_state == -1 %}
-
+        {% if stats.game_state == 4 %}
+<br>
+        <h2>You Won with {{stats.guess}} in {{stats.attempts}} tries!</h2>
+        {% elif stats.game_state == 5 %}
+<br>
                 You did not guess my number of {{stats.secret}} after your {{stats.tries}} guesses.
-                {% endif %}
+
+        {% elif stats.game_state == 3 %}
+        <br>
+        You have already guessed this number, or it is higher than the guessing range.
+{% endif %}
         </div>
             </div>
         {% endif %}
