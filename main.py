@@ -14,7 +14,7 @@ class InputForm(FlaskForm):
     submit = SubmitField("Let's Play!")
 
 class NumberForm(FlaskForm):
-    guess = IntegerField("What is your guess")
+    guess = IntegerField("")
     submit = SubmitField("Submit your guess")
 
 class PlayAgain(FlaskForm):
@@ -88,7 +88,8 @@ def play_game():
             "game_state": game_state,
             "direction": "",
             "guess": "",
-            "session_hs": ""
+            "session_hs": "",
+            "game_range":game_range
         }
     print(stats)
 
@@ -97,7 +98,7 @@ def play_game():
         print(stats)
         stats["guess"] = form.guess.data
 
-        if guess in stats["guesses"] or guess > game_range:  #not a valid guess
+        if guess in stats["guesses"] or guess > game_range or guess < 1:  #not a valid guess
             stats["game_state"] = 3
         else:
             attempts += 1
