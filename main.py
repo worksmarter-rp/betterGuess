@@ -106,11 +106,13 @@ def play_game():
                 session['guesses_under'].append(guess)
             session['guesses'].append(guess)
         stats = get_stats()
+
         form.guess.data = None
         if session.get('game_state') in {4, 5}:
             return render_template('play_game.html', form=form, stats=stats), {
                 'refresh': f'2; url="{url_for("new_game")}"'
             }
+
         return render_template('play_game.html', form=form, stats=stats)
     return render_template('play_game.html', form=form, stats=stats)
 
