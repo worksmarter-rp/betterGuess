@@ -1,3 +1,17 @@
+from urllib.parse import urlencode
+import werkzeug.urls
+
+# Older versions of :mod:`flask_wtf` relied on :func:`werkzeug.urls.url_encode`.
+# This function was removed in Werkzeug 3 which ships in the current
+# environment.  To keep the application working without pinning an older
+# Werkzeug we provide a small compatibility shim before importing
+# ``flask_wtf``.
+if not hasattr(werkzeug.urls, "url_encode"):
+    def _url_encode(obj, charset="utf-8", sort=False, key=None, separator="&"):
+        return urlencode(obj)
+
+    werkzeug.urls.url_encode = _url_encode
+
 from flask import Flask, render_template, url_for, redirect, flash
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
