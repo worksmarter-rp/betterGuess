@@ -28,7 +28,7 @@ class InputForm(FlaskForm):
     submit = SubmitField("Let's Play!")
 
 class NumberForm(FlaskForm):
-    guess = IntegerField("")
+    guess = IntegerField("", render_kw={"autofocus": True})
     submit = SubmitField("Submit your guess")
 
 # helper for new games
@@ -80,6 +80,10 @@ def play_game():
         session['game_state'] = 2
     form = NumberForm()
     stats = get_stats()
+    if session.get('game_state') in {4, 5}:
+        return render_template('play_game.html', form=form, stats=stats), {
+            'refresh': f'2; url="{url_for("new_game")}"'
+        }
     if form.validate_on_submit():
         guess = form.guess.data
         stats['guess'] = guess
@@ -102,6 +106,13 @@ def play_game():
                 session['guesses_under'].append(guess)
             session['guesses'].append(guess)
         stats = get_stats()
+
+        form.guess.data = None
+        if session.get('game_state') in {4, 5}:
+            return render_template('play_game.html', form=form, stats=stats), {
+                'refresh': f'2; url="{url_for("new_game")}"'
+            }
+
         return render_template('play_game.html', form=form, stats=stats)
     return render_template('play_game.html', form=form, stats=stats)
 

@@ -13,6 +13,13 @@
 
 Guess a number 1 to {{stats.game_range}}
 {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+<script>
+  const inp = document.getElementById('guess');
+  if (inp) {
+    inp.focus();
+    inp.value = '';
+  }
+</script>
     </div>
       <div class="row">
 
